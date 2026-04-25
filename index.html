@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>感谢星图</title>
+  </head>
+  <body>
+    <canvas id="starfield" aria-label="感谢星图可视化"></canvas>
+
+    <main class="shell">
+      <section class="topbar" aria-label="数据与视图控制">
+        <div class="brand">
+          <span class="kicker">观自</span>
+          <h1>感谢星图</h1>
+        </div>
+        <label class="library-control">
+          <span>文章库</span>
+          <select id="articleSelect"></select>
+        </label>
+        <div class="controls">
+          <button id="newArticle" type="button" title="新建一篇长文">新建文章</button>
+          <button id="saveArticle" type="button" title="保存当前文章数据">保存</button>
+          <label class="file-control">
+            <span>转发 CSV</span>
+            <input id="retweeterFile" type="file" accept=".csv,text/csv" />
+          </label>
+          <label class="file-control">
+            <span>引用 CSV</span>
+            <input id="quoteFile" type="file" accept=".csv,text/csv" />
+          </label>
+          <button id="resetView" type="button" title="重置镜头">Reset</button>
+        </div>
+      </section>
+
+      <section class="left-panel" aria-label="传播概览">
+        <p class="eyebrow">Thank you for carrying this idea further</p>
+        <h2>每一个光点，都是一次把文章递给世界的手。</h2>
+        <form id="extractForm" class="extract-form">
+          <label for="tweetUrlInput">从推文链接提取</label>
+          <div>
+            <input
+              id="tweetUrlInput"
+              type="url"
+              placeholder="https://x.com/用户名/status/123..."
+              autocomplete="off"
+            />
+            <button id="extractButton" type="submit">提取</button>
+          </div>
+          <p id="extractStatus">输入推文链接后，会保存到当前文章。</p>
+        </form>
+        <div class="stats-grid">
+          <div>
+            <span id="retweetCount">0</span>
+            <p>转发者</p>
+          </div>
+          <div>
+            <span id="quoteCount">0</span>
+            <p>引用</p>
+          </div>
+          <div>
+            <span id="supporterCount">0</span>
+            <p>总支持</p>
+          </div>
+          <div>
+            <span id="quoteSpan">-</span>
+            <p>传播跨度</p>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="dot retweet"></i>转发</span>
+          <span><i class="dot quote"></i>引用</span>
+          <span><i class="dot both"></i>同时转发与引用</span>
+        </div>
+      </section>
+
+      <section class="quote-panel" aria-label="引用展示">
+        <div class="quote-heading">
+          <span>Quote River</span>
+          <div>
+            <button id="prevQuote" type="button" title="上一条引用">‹</button>
+            <button id="nextQuote" type="button" title="下一条引用">›</button>
+          </div>
+        </div>
+        <blockquote id="quoteText">正在读取引用数据...</blockquote>
+        <a id="quoteAuthor" href="#" target="_blank" rel="noreferrer">-</a>
+        <p id="quoteTime">-</p>
+      </section>
+
+      <section class="bottom-panel" aria-label="名单搜索">
+        <div class="search-row">
+          <input id="searchInput" type="search" placeholder="搜索名字、用户名或引用内容" />
+          <div class="segments" role="group" aria-label="筛选">
+            <button class="active" type="button" data-filter="all">全部</button>
+            <button type="button" data-filter="quote">引用</button>
+            <button type="button" data-filter="retweet">转发</button>
+          </div>
+        </div>
+        <div id="peopleList" class="people-list"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

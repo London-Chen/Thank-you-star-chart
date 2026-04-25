@@ -1,0 +1,23 @@
+.DS_Store
+node_modules/
+dist/
+.superpowers/
+
+# Local/private scratch work from other experiments in this workspace.
+configs/
+docs/
+furongpet_scrape/
+/output/
+scripts/
+skills/
+resume-one-page.md
+resume-visual.html
+
+# Local X extraction service. It depends on local authenticated X state and is
+# not needed for the public static demo.
+x-extractor/
+
+# Keep the public demo dataset under public/output/.
+!public/
+!public/output/
+!public/output/*.csv
