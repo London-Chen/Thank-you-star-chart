@@ -25,4 +25,13 @@ The public demo data lives in `public/output/` so the static site can load an in
 
 ## X Extraction
 
-The in-page extraction form is designed for local use with the companion `x-extractor` service. It depends on a local authenticated X session, so it is not intended to run from the public Vercel demo yet.
+The deployed app includes a serverless `/api/extract` endpoint. To enable online extraction on Vercel, add these Environment Variables in the Vercel project:
+
+```text
+X_AUTH_TOKEN=your_x_auth_token_cookie
+X_CT0=your_x_ct0_cookie
+```
+
+Extraction results are returned to the browser and saved in that visitor's `localStorage`. The serverless endpoint does not keep each visitor's article library.
+
+Security note: these environment variables make the public endpoint use one X session for extraction. Use a dedicated X account/session if you make the deployed extractor available to others.

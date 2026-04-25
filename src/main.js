@@ -624,14 +624,20 @@ function normalizeExtractorRetweeters(rows) {
 }
 
 async function applyExtractionResult(job) {
-  if (!job.files?.retweetersJson || !job.files?.quotesJson) {
+  let retweetersRaw = job.retweeters;
+  let quotesRaw = job.quotes;
+
+  if (!retweetersRaw && job.files?.retweetersJson) {
+    retweetersRaw = await fetchJson(job.files.retweetersJson);
+  }
+  if (!quotesRaw && job.files?.quotesJson) {
+    quotesRaw = await fetchJson(job.files.quotesJson);
+  }
+
+  if (!retweetersRaw || !quotesRaw) {
     throw new Error("提取完成，但没有返回 JSON 文件。");
   }
 
-  const [retweetersRaw, quotesRaw] = await Promise.all([
-    fetchJson(job.files.retweetersJson),
-    fetchJson(job.files.quotesJson),
-  ]);
   const retweeters = normalizeExtractorRetweeters(retweetersRaw);
   const quotes = normalizeExtractorQuotes(quotesRaw);
   let summary = "提取完成，已保存到当前文章。";
@@ -693,6 +699,16 @@ async function startExtraction(url) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ url }),
   });
+
+  if (payload.status === "done" && (payload.retweeters || payload.quotes)) {
+    const summary = await applyExtractionResult(payload);
+    setExtractStatus(summary);
+    return;
+  }
+
+  if (!payload.id) {
+    throw new Error("提取接口没有返回任务 ID 或结果。");
+  }
 
   await pollExtractionJob(payload.id);
   state.extractPollTimer = window.setInterval(() => {
