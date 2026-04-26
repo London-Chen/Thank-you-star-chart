@@ -1,0 +1,14 @@
+{
+  "brandName": "You",
+  "appTitle": "Thank You Star Chart",
+  "pageTitle": "Thank You Star Chart",
+  "heroEyebrow": "Thank you for carrying this idea further",
+  "heroTitle": "Every light is someone who carried your work a little farther.",
+  "quotePanelTitle": "Quote River",
+  "extractLabel": "Extract from an X post",
+  "extractPlaceholder": "https://x.com/username/status/123...",
+  "extractIdleText": "Paste an X post URL to save it to the current article.",
+  "defaultArticleTitle": "My First Article",
+  "defaultRetweetersCsv": "/output/sample_retweeters.csv",
+  "defaultQuotesCsv": "/output/sample_quotes.csv"
+}

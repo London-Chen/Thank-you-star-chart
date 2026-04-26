@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>X 互动提取器</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="toolbar">
+        <div>
+          <h1>X 互动提取器</h1>
+          <p>粘贴一条推文链接，自动提取转发者和引用推文；引用会模拟滚动加载，可能需要几分钟。</p>
+        </div>
+        <span class="status-pill" id="statusPill">待开始</span>
+      </section>
+
+      <form class="input-row" id="extractForm">
+        <input
+          id="tweetUrl"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="https://x.com/username/status/1234567890"
+        />
+        <button type="submit" id="startButton">开始提取</button>
+      </form>
+
+      <section class="metrics">
+        <div>
+          <span>转发者</span>
+          <strong id="retweeterCount">0</strong>
+        </div>
+        <div>
+          <span>引用</span>
+          <strong id="quoteCount">0</strong>
+        </div>
+        <div>
+          <span>当前阶段</span>
+          <strong id="phase">等待输入</strong>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>输出文件</h2>
+          <button type="button" id="clearButton">清空日志</button>
+        </div>
+        <div class="file-grid" id="fileGrid">
+          <span class="muted">任务完成后会在这里出现下载链接。</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>运行日志</h2>
+        </div>
+        <pre id="logBox">准备好了。</pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

@@ -13,9 +13,8 @@ skills/
 resume-one-page.md
 resume-visual.html
 
-# Local X extraction service. It depends on local authenticated X state and is
-# not needed for the public static demo.
-x-extractor/
+# Generated files from the optional local X extraction service.
+x-extractor/output/
 
 # Keep the public demo dataset under public/output/.
 !public/

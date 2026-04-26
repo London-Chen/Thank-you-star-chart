@@ -1,9 +1,23 @@
 import "./styles.css";
 
-const DEFAULT_RETWEETERS = "/output/x_retweeters_2036816359343222971.csv";
-const DEFAULT_QUOTES = "/output/x_quotes_2036816359343222971.csv";
 const ARTICLES_STORAGE_KEY = "gratitude-starfield-articles";
 const CURRENT_ARTICLE_KEY = "gratitude-starfield-current-article";
+const CONFIG_URL = "/star-chart.config.json";
+
+const DEFAULT_CONFIG = {
+  brandName: "You",
+  appTitle: "Thank You Star Chart",
+  pageTitle: "Thank You Star Chart",
+  heroEyebrow: "Thank you for carrying this idea further",
+  heroTitle: "Every light is someone who carried your work a little farther.",
+  quotePanelTitle: "Quote River",
+  extractLabel: "Extract from an X post",
+  extractPlaceholder: "https://x.com/username/status/123...",
+  extractIdleText: "Paste an X post URL to save it to the current article.",
+  defaultArticleTitle: "My First Article",
+  defaultRetweetersCsv: "/output/sample_retweeters.csv",
+  defaultQuotesCsv: "/output/sample_quotes.csv",
+};
 
 const canvas = document.querySelector("#starfield");
 const ctx = canvas.getContext("2d");
@@ -15,6 +29,12 @@ const els = {
   quoteText: document.querySelector("#quoteText"),
   quoteAuthor: document.querySelector("#quoteAuthor"),
   quoteTime: document.querySelector("#quoteTime"),
+  brandName: document.querySelector("#brandName"),
+  appTitle: document.querySelector("#appTitle"),
+  heroEyebrow: document.querySelector("#heroEyebrow"),
+  heroTitle: document.querySelector("#heroTitle"),
+  extractLabel: document.querySelector("#extractLabel"),
+  quotePanelTitle: document.querySelector("#quotePanelTitle"),
   prevQuote: document.querySelector("#prevQuote"),
   nextQuote: document.querySelector("#nextQuote"),
   searchInput: document.querySelector("#searchInput"),
@@ -53,16 +73,42 @@ const state = {
   highlightedKey: null,
   hoveredParticle: null,
   selectedQuote: 0,
-  articleTitle: "第一篇文章",
+  articleTitle: DEFAULT_CONFIG.defaultArticleTitle,
   filter: "all",
   query: "",
   pointer: { x: 0, y: 0, active: false },
   isHoveringStar: false,
   lastManualFocusAt: 0,
   extractPollTimer: 0,
+  config: DEFAULT_CONFIG,
   camera: { x: 0, y: 0, zoom: 1 },
   size: { width: 0, height: 0, dpr: 1 },
 };
+
+async function loadConfig() {
+  try {
+    const response = await fetch(CONFIG_URL, { cache: "no-store" });
+    if (!response.ok) return DEFAULT_CONFIG;
+    const config = await response.json();
+    return { ...DEFAULT_CONFIG, ...config };
+  } catch {
+    return DEFAULT_CONFIG;
+  }
+}
+
+function applyConfig(config) {
+  state.config = config;
+  document.title = config.pageTitle || config.appTitle;
+  els.brandName.textContent = config.brandName;
+  els.appTitle.textContent = config.appTitle;
+  els.heroEyebrow.textContent = config.heroEyebrow;
+  els.heroTitle.textContent = config.heroTitle;
+  els.extractLabel.textContent = config.extractLabel;
+  els.tweetUrlInput.placeholder = config.extractPlaceholder;
+  els.extractStatus.textContent = config.extractIdleText;
+  els.quotePanelTitle.textContent = config.quotePanelTitle;
+  state.articleTitle = config.defaultArticleTitle;
+}
 
 function makeArticleId() {
   return `article-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -526,7 +572,7 @@ function drawCore(x, y, time) {
 }
 
 function drawCoreTitle(text, x, y, maxWidth) {
-  const value = text.trim() || "第一篇文章";
+  const value = text.trim() || state.config.defaultArticleTitle;
   const chars = [...value];
   let line = "";
   const lines = [];
@@ -737,13 +783,17 @@ function applyData(retweeters, quotes, options = {}) {
 }
 
 async function boot() {
+  applyConfig(await loadConfig());
   resize();
   state.articles = loadSavedArticles();
 
   if (!state.articles.length) {
     try {
-      const [retweeters, quotes] = await Promise.all([loadCsv(DEFAULT_RETWEETERS), loadCsv(DEFAULT_QUOTES)]);
-      const seed = createArticle("第一篇文章");
+      const [retweeters, quotes] = await Promise.all([
+        loadCsv(state.config.defaultRetweetersCsv),
+        loadCsv(state.config.defaultQuotesCsv),
+      ]);
+      const seed = createArticle(state.config.defaultArticleTitle);
       seed.retweeters = retweeters;
       seed.quotes = quotes;
       state.articles = [seed];
@@ -752,7 +802,7 @@ async function boot() {
       loadArticle(seed);
       showToast("已创建默认文章库");
     } catch (error) {
-      const blank = createArticle("第一篇文章");
+      const blank = createArticle(state.config.defaultArticleTitle);
       state.articles = [blank];
       state.currentArticleId = blank.id;
       persistArticles();

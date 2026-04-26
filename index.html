@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>感谢星图</title>
+    <title>Thank You Star Chart</title>
   </head>
   <body>
     <canvas id="starfield" aria-label="感谢星图可视化"></canvas>
@@ -11,8 +11,8 @@
     <main class="shell">
       <section class="topbar" aria-label="数据与视图控制">
         <div class="brand">
-          <span class="kicker">观自</span>
-          <h1>感谢星图</h1>
+          <span id="brandName" class="kicker">You</span>
+          <h1 id="appTitle">Thank You Star Chart</h1>
         </div>
         <label class="library-control">
           <span>文章库</span>
@@ -34,20 +34,20 @@
       </section>
 
       <section class="left-panel" aria-label="传播概览">
-        <p class="eyebrow">Thank you for carrying this idea further</p>
-        <h2>每一个光点，都是一次把文章递给世界的手。</h2>
+        <p id="heroEyebrow" class="eyebrow">Thank you for carrying this idea further</p>
+        <h2 id="heroTitle">Every light is someone who carried your work a little farther.</h2>
         <form id="extractForm" class="extract-form">
-          <label for="tweetUrlInput">从推文链接提取</label>
+          <label id="extractLabel" for="tweetUrlInput">Extract from an X post</label>
           <div>
             <input
               id="tweetUrlInput"
               type="url"
-              placeholder="https://x.com/用户名/status/123..."
+              placeholder="https://x.com/username/status/123..."
               autocomplete="off"
             />
             <button id="extractButton" type="submit">提取</button>
           </div>
-          <p id="extractStatus">输入推文链接后，会保存到当前文章。</p>
+          <p id="extractStatus">Paste an X post URL to save it to the current article.</p>
         </form>
         <div class="stats-grid">
           <div>
@@ -76,7 +76,7 @@
 
       <section class="quote-panel" aria-label="引用展示">
         <div class="quote-heading">
-          <span>Quote River</span>
+          <span id="quotePanelTitle">Quote River</span>
           <div>
             <button id="prevQuote" type="button" title="上一条引用">‹</button>
             <button id="nextQuote" type="button" title="下一条引用">›</button>
